@@ -1,91 +1,95 @@
-// Jashanpreet Kaur
- let userScore = 0;  
- let computerScore = 0;  
- const userScore_span = document.getElementById('user-score');  
- const computerScore_span = document.getElementById('computer-score');  
- const scoreBoard_div = document.querySelector('.score-board');  
- const result_div = document.querySelector('.result');  
- const rock_div = document.getElementById('rock');  
- const paper_div = document.getElementById('paper');  
- const scissors_div = document.getElementById('scissors');  
- // set up the core function for the computer that will use math.random to loop through an array and return that value  
- function getComputerChoice() {  
-  const choices = ['rock', 'paper', 'scissors'];  
-  const randomNumber = Math.floor(Math.random() * 3);  
-  return choices[randomNumber];  
- }  
- // similar to convertcase but just takes lowercase and replaces with titlecase  
- function convertCase(anythingIwant) {  
-  if (anythingIwant === 'paper') return 'Paper';  
-  if (anythingIwant === 'scissors') return 'Scissors';  
-  return 'Rock';  
- }  
- // Winning Condition - this handles what happens when the user clicks one of the choices where the value is them passed through as a parameter  
- function win(user, computer) {  
-  userScore++;  
-  // console.log('user score is ' + userScore + ' ' + user);  
-  userScore_span.innerHTML = userScore;  
-  const userName = ' (user)'.fontsize(3).sup();  
-  const compName = ' (comp)'.fontsize(3).sup();  
-  result_div.innerHTML = `<p>${convertCase(user)}${userName} beats ${convertCase(computer)}${compName}. You win!</p>`;  
-  const roundStatus = document.getElementById(user);  
-  roundStatus.classList.add('winningStyles');  
-  setTimeout(() => roundStatus.classList.remove('winningStyles'), 300);  
- }  
- // Losing Condition - this handles what happens when the user clicks one of the choices where the value is them passed through as a parameter  
- function loses(user, computer) {  
-  computerScore++;  
-  // console.log('computer score is ' + computerScore + ' ' + computer);  
-  computerScore_span.innerHTML = computerScore;  
-  const userName = ' (user)'.fontsize(3).sup();  
-  const compName = ' (comp)'.fontsize(3).sup();  
-  result_div.innerHTML = `<p>${convertCase(computer)}${compName} beats ${convertCase(user)}${userName}. You lose!</p>`;  
-  const roundStatus = document.getElementById(user);  
-  roundStatus.classList.add('losingStyles');  
-  setTimeout(() => roundStatus.classList.remove('losingStyles'), 300);  
- }  
- // Draw Condition - this handles what happens when the user clicks one of the choices where the value is them passed through as a parameter  
- function draw(user, computer) {  
-      const userName = ' (user)'.fontsize(3).sup();  
-  const compName = ' (comp)'.fontsize(3).sup();  
-  result_div.innerHTML = `<p>It was a draw! You both chose ${convertCase(user)}</p>`;  
-  // "It was a draw! You both chose " + user + " " + computer; // old js  
-  const roundStatus = document.getElementById(user);  
-  roundStatus.classList.add('drawStyles');  
-  setTimeout(() => roundStatus.classList.remove('drawStyles'), 300);  
- }  
- // The core game functions that set up and determine the games actual logic aka paper beats rock etc  
- function game(userChoice) {  
-  const computerChoice = getComputerChoice();  
-  // console.log('Game function: user choice is = ' + userChoice);  
-  // console.log('Game function: computer choice is = ' + computerChoice);  
-  switch (userChoice + computerChoice) {  
-   case 'paperrock':  
-   case 'rockscissors':  
-   case 'scissorspaper':  
-    win(userChoice, computerChoice);  
-    // console.log("user wins");  
-    break;  
-   case 'rockpaper':  
-   case 'scissorsrock':  
-   case 'paperscissors':  
-    loses(userChoice, computerChoice);  
-    // console.log("computer wins");  
-    break;  
-   case 'rockrock':  
-   case 'scissorsscissors':  
-   case 'paperpaper':  
-    draw(userChoice, computerChoice);  
-    // console.log("draw");  
-    break;  
-  }  
- }  
- 
- // ES6 style of writing this function  
- // This function creates and adds an eventlistener to the rock, paper scissors html element and the passes the value of that element to the game function  
- function main() {  
-  rock_div.addEventListener('click', () => game('rock'));  
-  paper_div.addEventListener('click', () => game('paper'));  
-  scissors_div.addEventListener('click', () => game('scissors'));  
- }  
- main(); 
+let myLife = 5;
+let rivalLife = 5;
+let round = 0;
+let message = "Let's beat him..."
+const selections = document.querySelectorAll('.selections');
+
+const roundp = document.querySelector('#round');
+roundp.textContent = `Round: ${round}`;
+
+const liveyou = document.querySelector('#liveyou')
+liveyou.textContent = `You: ${myLife}`;
+
+const liverival = document.querySelector('#liverival');
+liverival.textContent = `Enemy: ${rivalLife}`;
+
+const messa = document.querySelector('#instaresult');
+messa.textContent = message;
+
+
+function computerSelection() {
+    selection = Math.floor(Math.random() * (3));
+    switch (selection) {
+        case 0:
+           return 'rock';
+           break;
+        case 1:
+            return 'paper';
+            break;
+        case 2:
+            return 'scissor';
+            break; 
+    };
+};
+
+play = (player, computer) => {
+    if (player === computer) {
+        message = "You both took the same weapon :/"
+        return [0,0];
+
+    } else if (player === 'rock' && computer === 'paper') {
+        message = 'Oh no, he took paper.'
+        return [1,0];
+    } else if (player === 'rock' && computer === 'scissor') {
+        message = "Hurray, he took scissor's!"
+        return [0,1];
+
+    } else if (player === 'paper' && computer === 'rock') {
+        message = "Hurray, he took rock!"
+        return [0,1];
+    } else if (player === 'paper' && computer === 'scissor') {
+        message = "Aww, he took scissor."
+        return [1,0];
+
+    } else if (player === 'scissor' && computer === 'rock') {
+        message = "Aww, he took rock."
+        return [1,0];
+    } else if (player === 'scissor' && computer === 'paper') {
+        message = "Yoohaa, he took paper."
+        return [0,1];
+    }
+};
+
+scoring = (array) => {
+    myLife = myLife - array[0];
+    rivalLife = rivalLife - array[1];
+}
+
+const body = document.querySelector('body');
+
+playerLose = () => {
+    body.innerHTML = "<div id='last'><iframe style = 'padding: 10px;' src='https://giphy.com/embed/4QFAH0qZ0LQnIwVYKT' width='480' height='345' frameBorder='0' class='giphy-embed' allowFullScreen></iframe><p><a href='https://giphy.com/gifs/cbc-schitts-creek-4QFAH0qZ0LQnIwVYKT'>via GIPHY</a></p><h2>It seems like you've lost this game. But don't worry, we can play again!</h2><button onclick='location.reload()'>Play again!</button></div>";
+}
+
+playerWin = () => {
+    body.innerHTML = "<div id='last'><iframe src='https://giphy.com/embed/ZcUGu59vhBGgbBhh0n' width='480' height='360' frameBorder='0' class='giphy-embed' allowFullScreen></iframe><p><a href='https://giphy.com/gifs/barstoolsports-gambling-barstool-beadvised-ZcUGu59vhBGgbBhh0n'>via GIPHY</a></p><h2>Hurray, you won the game. Wanna try again?</h2><button onclick='location.reload()'>Play again!</button></div>";
+}
+
+selections.forEach((selection) => {
+    selection.addEventListener('click', () => {
+        let playerSelection = selection.id;
+        scoring(play(playerSelection, computerSelection()));
+        round++;
+        if (round === 10) {
+            body.innerHTML = "<div id = 'last'><h2>You only have 10 rounds in total. Better luck next time.</h2></div>";
+            setTimeout( () => location.reload(), 5000);
+        }
+        roundp.textContent = `Round: ${round}`;
+        liveyou.textContent = `You: ${myLife}`;
+        liverival.textContent = `Enemy: ${rivalLife}`;
+        messa.textContent = message;
+
+        if (myLife ===  0) playerLose();
+        else if (rivalLife === 0) playerWin();
+    });
+});
